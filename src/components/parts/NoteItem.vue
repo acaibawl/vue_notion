@@ -15,10 +15,10 @@
         <div class="note-name">{{ note.name }}</div>
 
         <div v-show="note.mouseover" class="buttons">
-          <div class="button-icon" @click="onClickChildNote(note)">
+          <div class="button-icon" v-if="layer < 3" @click="onClickChildNote(note)">
             <i class="fas fa-sitemap"></i>
           </div>
-          <div class="button-icon">
+          <div class="button-icon" @click="onClickAddNoteAfter(parentNote, note)">
             <i class="fas fa-plus-circle"></i>
           </div>
           <div class="button-icon" @click="onClickEdit(note)">
@@ -34,12 +34,14 @@
       <NoteItem
         v-for="childNote in note.children"
         :note="childNote"
+        :layer="layer + 1"
         :parentNote="note"
         :key="childNote.id"
         @delete="onClickDelete"
         @editStart="onClickEdit"
         @editEnd="onEditEnd"
         @addChild="onClickChildNote"
+        @addNoteAfter="onClickAddNoteAfter"
       />
     </div>
   </div>
@@ -51,6 +53,7 @@ export default {
   props: [
     'note',
     'parentNote',
+    'layer',
   ],
   methods: {
     onMouseOver: function() {
@@ -71,6 +74,9 @@ export default {
     onClickChildNote: function(note) {
       this.$emit('addChild', note);
     },
+    onClickAddNoteAfter: function(parentNote, note) {
+      this.$emit('addNoteAfter', parentNote, note);
+    }
   }
 }
 </script>
