@@ -1,18 +1,19 @@
 <template>
   <div class="main-page">
     <div class="left-menu" @click.self="onEditNoteEnd()">
-      <NoteItem
-        v-for="note in noteList"
-        :note="note"
-        :layer="1"
-        :key="note.id"
-        @delete="onDeleteNote"
-        @editStart="onEditNoteStart"
-        @editEnd="onEditNoteEnd"
-        @addChild="onAddChildNote"
-        @addNoteAfter="onAddNoteAfter"
-      />
-
+      <draggable :list="noteList" group="notes">
+        <NoteItem
+          v-for="note in noteList"
+          :note="note"
+          :layer="1"
+          :key="note.id"
+          @delete="onDeleteNote"
+          @editStart="onEditNoteStart"
+          @editEnd="onEditNoteEnd"
+          @addChild="onAddChildNote"
+          @addNoteAfter="onAddNoteAfter"
+        />
+      </draggable>
       <button class="transparent" @click="onClickButtonAdd">
         <i class="fas fa-plus-square"></i>ノートを追加
       </button>
@@ -26,6 +27,8 @@
 
 <script>
 import NoteItem from "./parts/NoteItem.vue";
+import draggable from 'vuedraggable';
+
 export default {
     data() {
         return {
@@ -83,7 +86,7 @@ export default {
           this.onAddNoteCommon(targetList, layer, index);
         },
     },
-    components: { NoteItem }
+    components: { NoteItem, draggable }
 };
 </script>
 
