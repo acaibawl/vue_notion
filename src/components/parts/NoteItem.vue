@@ -1,33 +1,46 @@
 <template>
-  <div class="note"
-    @mouseover="onMouseOver"
-    @mouseleave="onMouseLeave"
-    :class="{mouseover: note.mouseover && !note.editing}"
-  >
-    <template v-if="note.editing">
-      <input v-model="note.name" class="transparent" @keypress.enter="onEditEnd" >
-    </template>
-    <template v-else>
-      <div class="note-icon">
-        <i class="fas fa-file-alt"></i>
-      </div>
-      <div class="note-name">{{ note.name }}</div>
+  <div class="note-family">
+    <div class="note"
+      @mouseover="onMouseOver"
+      @mouseleave="onMouseLeave"
+      :class="{mouseover: note.mouseover && !note.editing}"
+    >
+      <template v-if="note.editing">
+        <input v-model="note.name" class="transparent" @keypress.enter="onEditEnd" >
+      </template>
+      <template v-else>
+        <div class="note-icon">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="note-name">{{ note.name }}</div>
 
-      <div v-show="note.mouseover" class="buttons">
-        <div class="button-icon">
-          <i class="fas fa-sitemap"></i>
+        <div v-show="note.mouseover" class="buttons">
+          <div class="button-icon" @click="onClickChildNote(note)">
+            <i class="fas fa-sitemap"></i>
+          </div>
+          <div class="button-icon">
+            <i class="fas fa-plus-circle"></i>
+          </div>
+          <div class="button-icon" @click="onClickEdit(note)">
+            <i class="fas fa-edit"></i>
+          </div>
+          <div class="button-icon" @click="onClickDelete(note)">
+            <i class="fas fa-trash"></i>
+          </div>
         </div>
-        <div class="button-icon">
-          <i class="fas fa-plus-circle"></i>
-        </div>
-        <div class="button-icon" @click="onClickEdit(note)">
-          <i class="fas fa-edit"></i>
-        </div>
-        <div class="button-icon" @click="onClickDelete(note)">
-          <i class="fas fa-trash"></i>
-        </div>
-      </div>
-    </template>
+      </template>
+    </div>
+    <div class="child-note">
+      <NoteItem
+        v-for="childNote in note.children"
+        :note="childNote"
+        :key="childNote.id"
+        @delete="onClickDelete"
+        @editStart="onClickEdit"
+        @editEnd="onEditEnd"
+        @addChild="onClickChildNote"
+      />
+    </div>
   </div>
 </template>
 
@@ -52,7 +65,10 @@ export default {
     },
     onEditEnd: function() {
       this.$emit('editEnd');
-    }
+    },
+    onClickChildNote: function(note) {
+      this.$emit('addChild', note);
+    },
   }
 }
 </script>
@@ -88,5 +104,9 @@ export default {
       border-radius: 5px;
     }
   }
+}
+
+.child-note {
+  padding-left: 10px;
 }
 </style>
