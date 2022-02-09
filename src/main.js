@@ -9,10 +9,13 @@ Vue.use(VueRouter);
 Vue.use(Toasted);
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
+  base: process.env.NODE_ENV === 'production'
+    ? '/vue_notion/'   //任意
+    : '/',
   routes: [
     {
-      path: '/main',
+      path: '/',
       component: () => import('./components/MainPage.vue')
     },
     {
@@ -29,7 +32,7 @@ const router = new VueRouter({
     },
     {
       path: '/*',
-      redirect: '/main',
+      redirect: '/',
     }
   ]
 });

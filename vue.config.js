@@ -9,5 +9,8 @@ module.exports = {
     port: 8081,
     disableHostCheck: true,
     host: 'localhost'
-  }
+  },
+  publicPath: process.env.NODE_ENV === 'production'
+  ? '/vue_notion/'   //任意
+  : '/'
 };
