@@ -1,12 +1,11 @@
 <template>
   <div class="main-page">
     <div class="left-menu">
-      <div class="note" v-for="note in noteList" :key="note.id">
-        <div class="note-icon">
-          <i class="fas fa-file-alt"></i>
-        </div>
-        <div class="note-name">{{ note.name }}</div>
-      </div>
+      <NoteItem
+        v-for="note in noteList"
+        :note="note"
+        :key="note.id"
+      />
 
       <button class="transparent" @click="onClickButtonAdd">
         <i class="fas fa-plus-square"></i>ノートを追加
@@ -20,20 +19,22 @@
 
 
 <script>
+import NoteItem from "./parts/NoteItem.vue";
 export default {
-  data() {
-    return {
-      noteList: [],
-    }
-  },
-  methods: {
-    onClickButtonAdd: function() {
-      this.noteList.push({
-        id: new Date().getTime().toString(16),
-        name: '新規ノート',
-      });
+    data() {
+        return {
+            noteList: [],
+        };
     },
-  },
+    methods: {
+        onClickButtonAdd: function () {
+            this.noteList.push({
+                id: new Date().getTime().toString(16),
+                name: "新規ノート",
+            });
+        },
+    },
+    components: { NoteItem }
 };
 </script>
 
@@ -44,21 +45,6 @@ export default {
   .left-menu {
     width: 350px;
     background-color: #f7f6f3;
-
-    .note {
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    color: rgba(25, 23, 17, 0.6);
-      .note-icon {
-        margin-left: 10px;
-      }
-      .note-name {
-        width: 100%;
-        padding: 3px 10px;
-      }
-    }
   }
   .right-view {
     flex-grow: 1;
